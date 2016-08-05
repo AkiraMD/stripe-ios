@@ -36,6 +36,8 @@
 
 @property(nonatomic, assign)BOOL numberFieldShrunk;
 
+@property(nonatomic, strong)UIGestureRecognizer*brandImageTap;
+
 @end
 
 @implementation STPPaymentCardTextField
@@ -91,6 +93,10 @@ CGFloat const STPPaymentCardTextFieldDefaultPadding = 10;
         brandImageView.tintColor = self.placeholderColor;
     }
     self.brandImageView = brandImageView;
+
+    _brandImageTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(brandImageTapped)];
+    [brandImageView setUserInteractionEnabled:YES];
+    [brandImageView addGestureRecognizer:_brandImageTap];
     
     STPFormTextField *numberField = [self buildTextField];
     numberField.autoFormattingBehavior = STPFormTextFieldAutoFormattingBehaviorCardNumbers;
@@ -120,6 +126,13 @@ CGFloat const STPPaymentCardTextFieldDefaultPadding = 10;
     [self.fieldsView addSubview:expirationField];
     [self.fieldsView addSubview:numberField];
     [self addSubview:brandImageView];
+    
+    [self.fieldsView setUserInteractionEnabled:YES];
+    [self.fieldsView addGestureRecognizer:_brandImageTap];
+}
+
+-(void)brandImageTapped {
+    [self.numberField becomeFirstResponder];
 }
 
 - (STPPaymentCardTextFieldViewModel *)viewModel {
@@ -310,6 +323,7 @@ CGFloat const STPPaymentCardTextFieldDefaultPadding = 10;
     if ([self.viewModel validationStateForField:STPCardFieldTypeNumber] != STPCardValidationStateValid) {
         return self.numberField;
     } else if ([self.viewModel validationStateForField:STPCardFieldTypeExpiration] != STPCardValidationStateValid) {
+        [self.fieldsView removeGestureRecognizer:_brandImageTap];
         return self.expirationField;
     } else {
         return self.cvcField;
