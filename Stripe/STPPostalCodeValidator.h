@@ -7,9 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "STPCardValidationState.h"
+
+typedef NS_ENUM(NSUInteger, STPPostalCodeIntendedUsage) {
+    STPPostalCodeIntendedUsageBillingAddress,
+    STPPostalCodeIntendedUsageShippingAddress,
+};
 
 @interface STPPostalCodeValidator : NSObject
++ (BOOL)postalCodeIsRequiredForCountryCode:(nullable NSString *)countryCode;
++ (STPCardValidationState)validationStateForPostalCode:(nullable NSString *)postalCode
+                                           countryCode:(nullable NSString *)countryCode;
 
-+ (BOOL)stringIsValidPostalCode:(nullable NSString *)string;
-
++ (nullable NSString *)formattedSanitizedPostalCodeFromString:(nullable NSString *)postalCode
+                                                  countryCode:(nullable NSString *)countryCode
+                                                        usage:(STPPostalCodeIntendedUsage)usage;
 @end

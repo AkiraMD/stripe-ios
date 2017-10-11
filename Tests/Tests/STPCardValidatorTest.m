@@ -12,6 +12,19 @@
 #import "STPCardValidationState.h"
 #import "STPCardValidator.h"
 
+@interface STPCardValidator (Testing)
+
++ (STPCardValidationState)validationStateForExpirationYear:(NSString *)expirationYear
+                                                   inMonth:(NSString *)expirationMonth
+                                             inCurrentYear:(NSInteger)currentYear
+                                              currentMonth:(NSInteger)currentMonth;
+
++ (STPCardValidationState)validationStateForCard:(STPCardParams *)card
+                                   inCurrentYear:(NSInteger)currentYear
+                                    currentMonth:(NSInteger)currentMonth;
+
+@end
+
 @interface STPCardValidatorTest : XCTestCase
 @end
 
@@ -43,6 +56,8 @@
                        @[@"4242424242424242", @"4242424242424242"],
                        @[@"XXXXXX", @""],
                        @[@"424242424242424X", @"424242424242424"],
+                       @[@"X4242", @"4242"],
+                       @[@"4242 4242 4242 4242", @"4242424242424242"]
                        ];
     for (NSArray *test in tests) {
         XCTAssertEqualObjects([STPCardValidator sanitizedNumericStringForString:test[0]], test[1]);
@@ -101,6 +116,7 @@
     XCTAssertEqual(STPCardValidationStateValid, [STPCardValidator validationStateForNumber:@"0000000000000000" validatingCardBrand:NO]);
     XCTAssertEqual(STPCardValidationStateValid, [STPCardValidator validationStateForNumber:@"9999999999999995" validatingCardBrand:NO]);
     XCTAssertEqual(STPCardValidationStateIncomplete, [STPCardValidator validationStateForNumber:@"4242424242424" validatingCardBrand:YES]);
+    XCTAssertEqual(STPCardValidationStateIncomplete, [STPCardValidator validationStateForNumber:nil validatingCardBrand:YES]);
 }
 
 - (void)testBrand {
@@ -171,10 +187,13 @@
                        @[@"9", @"15", @(STPCardValidationStateValid)],
                        @[@"11", @"16", @(STPCardValidationStateValid)],
                        @[@"11", @"99", @(STPCardValidationStateValid)],
-                       @[@"00", @"99", @(STPCardValidationStateValid)],
+                       @[@"01", @"99", @(STPCardValidationStateValid)],
+                       @[@"1", @"99", @(STPCardValidationStateValid)],
+                       @[@"00", @"99", @(STPCardValidationStateInvalid)],
                        @[@"12", @"14", @(STPCardValidationStateInvalid)],
                        @[@"7", @"15", @(STPCardValidationStateInvalid)],
                        @[@"12", @"00", @(STPCardValidationStateInvalid)],
+                       @[@"13", @"16", @(STPCardValidationStateInvalid)],
                        @[@"12", @"2", @(STPCardValidationStateIncomplete)],
                        @[@"12", @"1", @(STPCardValidationStateIncomplete)],
                        @[@"12", @"0", @(STPCardValidationStateIncomplete)],

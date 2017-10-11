@@ -11,11 +11,11 @@
 #import "STPFormEncodable.h"
 
 @interface STPTestFormEncodableObject : NSObject<STPFormEncodable>
-@property(nonatomic) NSString *testProperty;
-@property(nonatomic) NSString *testIgnoredProperty;
-@property(nonatomic) NSArray *testArrayProperty;
-@property(nonatomic) NSDictionary *testDictionaryProperty;
-@property(nonatomic) STPTestFormEncodableObject *testNestedObjectProperty;
+@property (nonatomic) NSString *testProperty;
+@property (nonatomic) NSString *testIgnoredProperty;
+@property (nonatomic) NSArray *testArrayProperty;
+@property (nonatomic) NSDictionary *testDictionaryProperty;
+@property (nonatomic) STPTestFormEncodableObject *testNestedObjectProperty;
 @end
 
 @implementation STPTestFormEncodableObject
@@ -60,8 +60,9 @@
 
 // helper test method
 - (NSString *)encodeObject:(STPTestFormEncodableObject *)object {
-    NSData *encoded = [STPFormEncoder formEncodedDataForObject:object];
-    return [[[NSString alloc] initWithData:encoded encoding:NSUTF8StringEncoding] stringByRemovingPercentEncoding];
+    NSDictionary *dictionary = [STPFormEncoder dictionaryForObject:object];
+    NSString *queryString = [STPFormEncoder queryStringFromParameters:dictionary];
+    return [queryString stringByRemovingPercentEncoding];
 }
 
 - (void)testFormEncoding_emptyObject {

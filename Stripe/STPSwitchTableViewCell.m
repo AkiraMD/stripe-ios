@@ -11,9 +11,9 @@
 
 @interface STPSwitchTableViewCell()
 
-@property(nonatomic, weak)UILabel *captionLabel;
-@property(nonatomic, weak)UISwitch *switchView;
-@property(nonatomic, weak)id<STPSwitchTableViewCellDelegate> delegate;
+@property (nonatomic, weak) UILabel *captionLabel;
+@property (nonatomic, weak) UISwitch *switchView;
+@property (nonatomic, weak) id<STPSwitchTableViewCellDelegate> delegate;
 
 @end
 
@@ -72,6 +72,7 @@
 - (void)configureWithLabel:(NSString *)label
                   delegate:(id<STPSwitchTableViewCellDelegate>)delegate {
     self.captionLabel.text = label;
+    self.switchView.accessibilityLabel = label;
     self.delegate = delegate;
 }
 
@@ -82,4 +83,8 @@
     return self.switchView.on;
 }
 
+
+- (void)setOn:(BOOL)on {
+    self.switchView.on = on;
+}
 @end
