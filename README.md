@@ -1,3 +1,7 @@
+# Archived Repository
+
+This repository has been archived and is no longer maintained.
+
 # Stripe iOS SDK
 
 [![Travis](https://img.shields.io/travis/stripe/stripe-ios/master.svg?style=flat)](https://travis-ci.org/stripe/stripe-ios)
